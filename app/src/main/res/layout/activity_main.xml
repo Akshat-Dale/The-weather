@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/day"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <EditText
+            android:id="@+id/cityEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/background_textview"
+            android:drawableEnd="@drawable/ic_baseline_search_24"
+            android:ems="10"
+            android:hint="Enter city"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="#A7FFFFFF" />
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="5dp"
+            android:backgroundTint="#D1EAEAEA"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true">
+
+            <TextView
+                android:id="@+id/cityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:shadowColor="#62000000"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:shadowRadius="8"
+                android:text="Indore"
+                android:textColor="#E72196F3"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/conditionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="45dp"
+                android:layout_marginRight="20dp"
+                android:text="Clear"
+                android:textSize="30sp"
+                android:shadowColor="#62000000"
+                android:shadowRadius="8"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:textColor="#E72196F3"
+                />
+
+            <ImageView
+                android:id="@+id/weatherImageView"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="start"
+                android:outlineAmbientShadowColor="@color/black"
+                android:outlineSpotShadowColor="@color/black"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                app:srcCompat="@drawable/weatherlogo" />
+
+            <TextView
+                android:id="@+id/temperatureTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="70dp"
+                android:layout_marginRight="20dp"
+                android:shadowColor="#62000000"
+                android:shadowRadius="20"
+                android:shadowDx="10"
+                android:shadowDy="10"
+                android:textColor="#E72196F3"
+                android:text="00.0°C"
+                android:textSize="75dp" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/sunriseTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sunrise/Sunset"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="#E72196F3"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+
+        <TextView
+            android:id="@+id/windTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:gravity="center"
+            android:text="Windspeed"
+            android:textColor="#E72196F3"
+            android:textSize="25sp" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
