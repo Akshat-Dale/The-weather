@@ -61,7 +61,9 @@
                 android:shadowRadius="8"
                 android:text="Indore"
                 android:textColor="#E72196F3"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:drawableStart="@drawable/ic_baseline_location_on_24"
+                android:drawablePadding="5dp"/>
 
             <TextView
                 android:id="@+id/conditionTextView"
@@ -105,34 +107,40 @@
                 android:text="00.0°C"
                 android:textSize="75dp" />
 
+            <TextView
+                android:id="@+id/sunTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sunrise/Sunset"
+                android:textSize="20sp"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="#E72196F3"
+                android:layout_marginTop="160dp"
+                android:layout_marginLeft="10dp"
+                android:drawableStart="@drawable/sunrise"
+                android:drawablePadding="5dp"
+               />
+
+
+            <TextView
+                android:id="@+id/windTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="195dp"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:gravity="start"
+                android:text="Windspeed"
+                android:textColor="#E72196F3"
+                android:textSize="20sp"
+                android:drawableStart="@drawable/windmill"
+                android:drawablePadding="5dp"/>
+
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/sunriseTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sunrise/Sunset"
-            android:textSize="25sp"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textColor="#E72196F3"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
 
-
-        <TextView
-            android:id="@+id/windTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:padding="5dp"
-            android:gravity="center"
-            android:text="Windspeed"
-            android:textColor="#E72196F3"
-            android:textSize="25sp" />
 
 
     </LinearLayout>
