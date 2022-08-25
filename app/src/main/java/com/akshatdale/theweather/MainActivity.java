@@ -3,9 +3,11 @@ package com.akshatdale.theweather;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -18,11 +20,14 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText cityEditText;
     TextView cityTextView,conditionTextView,temperatureTextView,sunTextView,windTextView;
     ImageView weatherImageView;
+    LinearLayout linearLayoutFirst;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +41,21 @@ public class MainActivity extends AppCompatActivity {
         sunTextView = findViewById(R.id.sunTextView);
         windTextView = findViewById(R.id.windTextView);
         weatherImageView = findViewById(R.id.weatherImageView);
+        linearLayoutFirst = findViewById(R.id.linearLayoutFirst);
 
+
+        Date dt = new Date();
+        int hours = dt.getHours();
+        System.out.println(hours);
+
+        if (hours>=6 && hours<=19){
+            weatherImageView.setImageResource(R.drawable.sun);
+            linearLayoutFirst.setBackgroundResource(R.drawable.day);
+        }
+        else{
+            weatherImageView.setImageResource(R.drawable.moon);
+            linearLayoutFirst.setBackgroundResource(R.drawable.night);
+        }
 
 //        RequestQueue requestQueue;
 //        requestQueue = Volley.newRequestQueue(this);

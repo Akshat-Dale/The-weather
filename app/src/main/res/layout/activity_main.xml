@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayoutFirst"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/day"
@@ -43,7 +44,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:backgroundTint="#D1EAEAEA"
+            android:backgroundTint="#EAEAEA"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
             app:cardUseCompatPadding="true">
@@ -54,16 +55,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
+                android:drawableStart="@drawable/ic_baseline_location_on_24"
+                android:drawablePadding="5dp"
                 android:shadowColor="#62000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="8"
-                android:text="Indore"
+                android:text="Indore  "
                 android:textColor="#E72196F3"
-                android:textSize="30sp"
-                android:drawableStart="@drawable/ic_baseline_location_on_24"
-                android:drawablePadding="5dp"/>
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/conditionTextView"
@@ -71,8 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="45dp"
-                android:layout_marginRight="20dp"
-                android:text="Clear"
+                android:text="Clear  "
                 android:textSize="30sp"
                 android:shadowColor="#62000000"
                 android:shadowRadius="8"
@@ -97,15 +96,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginTop="70dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginTop="75dp"
                 android:shadowColor="#62000000"
                 android:shadowRadius="20"
                 android:shadowDx="10"
                 android:shadowDy="10"
                 android:textColor="#E72196F3"
-                android:text="00.0°C"
-                android:textSize="75dp" />
+                android:text="00.0°C "
+                android:textSize="65sp" />
 
             <TextView
                 android:id="@+id/sunTextView"
