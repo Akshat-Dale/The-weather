@@ -14,12 +14,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,47 +46,66 @@ public class MainActivity extends AppCompatActivity {
         weatherImageView = findViewById(R.id.weatherImageView);
         linearLayoutFirst = findViewById(R.id.linearLayoutFirst);
 
-
-        Date dt = new Date();
-        int hours = dt.getHours();
-        System.out.println(hours);
-
-        if (hours>=6 && hours<=19){
-            weatherImageView.setImageResource(R.drawable.sun);
-            linearLayoutFirst.setBackgroundResource(R.drawable.day);
-        }
-        else{
-            weatherImageView.setImageResource(R.drawable.moon);
-            linearLayoutFirst.setBackgroundResource(R.drawable.night);
-        }
-
-//        RequestQueue requestQueue;
-//        requestQueue = Volley.newRequestQueue(this);
+//        GETTING CITY NAME FROM EditText
+        String GetCityName = cityEditText.getText().toString();
 //
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-//                "https://goweather.herokuapp.com/weather/indore", null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//
-//                try {
-//                    Log.d("weather", "The temperature is :" + response.getString("temperature"));
-//                    Log.d("weather", "The description is :" + response.getString("description"));
-//                    Log.d("weather", "The wind is :" + response.getString("wind"));
-//                } catch (JSONException e) {
-//                    Log.i("weather","kuch lafda hai");
-////                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("weather", "Something went wrong");
-//            }
-//        });
-//
-//        requestQueue.add(jsonObjectRequest);
-//
+    }
 
+
+
+
+
+
+
+    public void callWeatherAPI(){
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(MainActivity.this);
+
+        String getCityLatLong ="https://api.openweathermap.org/geo/1.0/direct?q=khirkiya,&limit=1&appid=b63f3db52cd36ca5cc60f382ff723087";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, getCityLatLong, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                JSONArray profile = null;
+                try {
+
+                    profile = new JSONArray(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    JSONObject jresponse = profile.getJSONObject(0);
+                    Log.i("WEATHER", "The CITY is :" + response.getString(0));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                getCityLatLong, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    Log.d("WEATHER", "The CITY is :" + response.getString("name"));
+                } catch (JSONException e) {
+                    Log.i("WEATHER","kuch lafda hai");
+//                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("weather", "Something went wrong");
+            }
+        });
+         requestQueue.add(jsonObjectRequest);
 
     }
 }
