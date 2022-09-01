@@ -45,8 +45,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/ic_baseline_search_24"
-                android:onClick="getLatLongCallAPI"
-                android:backgroundTint="#FFFFFF"
+                android:onClick="getWeatherDataCallAPI"
               />
         </LinearLayout>
 
@@ -119,13 +118,14 @@
                 android:shadowDy="10"
                 android:textColor="#E72196F3"
                 android:text="00.0°C "
-                android:textSize="65sp" />
+                android:textSize="65sp"
+                />
 
             <TextView
-                android:id="@+id/sunTextView"
-                android:layout_width="match_parent"
+                android:id="@+id/textViewSunrise"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sunrise/Sunset"
+                android:text="Sunrise"
                 android:textSize="20sp"
                 android:gravity="start"
                 android:padding="5dp"
@@ -136,10 +136,52 @@
                 android:drawablePadding="5dp"
                />
 
+            <TextView
+                android:id="@+id/textViewSunriseTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="160dp"
+                android:drawablePadding="5dp"
+                android:foregroundGravity="center"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="6:00"
+                android:textColor="#E72196F3"
+                android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/windTextView"
-                android:layout_width="match_parent"
+                 android:id="@+id/textViewSunset"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Sunset"
+                 android:textSize="20sp"
+                 android:layout_gravity="end"
+                 android:padding="5dp"
+                 android:textColor="#E72196F3"
+                 android:drawableStart="@drawable/sunrise"
+                 android:layout_marginTop="160dp"
+                 android:layout_marginRight="65sp"
+                 android:drawablePadding="5dp" />
+
+
+            <TextView
+                android:id="@+id/textViewSunsetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18:00"
+                android:textSize="20sp"
+                android:layout_gravity="end"
+                android:padding="5dp"
+                android:textColor="#E72196F3"
+                android:layout_marginTop="160dp"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="5dp" />
+
+            <TextView
+                android:id="@+id/textViewWind"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="195dp"
                 android:layout_marginLeft="10dp"
@@ -151,20 +193,56 @@
                 android:drawableStart="@drawable/windmill"
                 android:drawablePadding="5dp"/>
 
+              <TextView
+                  android:id="@+id/textViewWindSpeed"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="195dp"
+                  android:layout_marginLeft="150dp"
+                  android:padding="5dp"
+                  android:gravity="center"
+                  android:text="10km/h"
+                  android:textColor="#E72196F3"
+                  android:textSize="20sp"
+                  android:drawablePadding="5dp"/>
 
+            <TextView
+                android:id="@+id/textViewHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="230dp"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                android:gravity="start"
+                android:text="Humidity"
+                android:textColor="#E72196F3"
+                android:textSize="20sp"
+                android:drawableStart="@drawable/windmill"
+                android:drawablePadding="5dp"/>
 
+            <TextView
+                android:id="@+id/textViewHumidityPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="230dp"
+                android:layout_marginLeft="135dp"
+                android:padding="5dp"
+                android:gravity="center"
+                android:text="50%"
+                android:textColor="#E72196F3"
+                android:textSize="20sp"
+                android:drawablePadding="5dp"/>
 
         </androidx.cardview.widget.CardView>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewForecast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="150dp" />
-
-
-
-
+            android:layout_marginTop="150dp"
+            />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
