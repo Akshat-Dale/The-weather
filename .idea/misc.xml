@@ -3,10 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable-v24/humidity_icon.xml" value="0.1675" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1675" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable-v24/sunris.xml" value="0.1675" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable-v24/sunseticon.xml" value="0.1675" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable-v24/wind_icon.xml" value="0.169" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable-v24/windicon.xml" value="0.1675" />
         <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable/background_textview.xml" value="0.18" />
         <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.1675" />
         <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.145" />
-        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1675" />
+        <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/layout/forcast_layout.xml" value="0.33" />
         <entry key="..\:/Users/lenovo/AndroidStudioProjects/TheWeather/app/src/main/res/layout/textview_background.xml" value="0.1644021739130435" />
       </map>

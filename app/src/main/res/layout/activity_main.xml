@@ -96,7 +96,7 @@
 
             <ImageView
                 android:id="@+id/weatherImageView"
-                android:layout_width="110dp"
+                android:layout_width="120dp"
                 android:layout_height="110dp"
                 android:layout_gravity="start"
                 android:outlineAmbientShadowColor="@color/black"
@@ -125,16 +125,15 @@
                 android:id="@+id/textViewSunrise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sunrise"
-                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="160dp"
+                android:drawableStart="@drawable/sunrise_icon"
+                android:drawablePadding="5dp"
                 android:gravity="start"
                 android:padding="5dp"
+                android:text="Sunrise"
                 android:textColor="#E72196F3"
-                android:layout_marginTop="160dp"
-                android:layout_marginLeft="10dp"
-                android:drawableStart="@drawable/sunrise"
-                android:drawablePadding="5dp"
-               />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewSunriseTime"
@@ -160,7 +159,7 @@
                  android:layout_gravity="end"
                  android:padding="5dp"
                  android:textColor="#E72196F3"
-                 android:drawableStart="@drawable/sunrise"
+                 android:drawableStart="@drawable/sunset_icon"
                  android:layout_marginTop="160dp"
                  android:layout_marginRight="65sp"
                  android:drawablePadding="5dp" />
@@ -190,7 +189,7 @@
                 android:text="Windspeed"
                 android:textColor="#E72196F3"
                 android:textSize="20sp"
-                android:drawableStart="@drawable/wind"
+                android:drawableStart="@drawable/wind_icon"
                 android:drawablePadding="5dp"/>
 
               <TextView
@@ -212,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="230dp"
-                android:drawableStart="@drawable/leaf"
+                android:drawableStart="@drawable/humidity_icon"
                 android:drawablePadding="5dp"
                 android:gravity="start"
                 android:padding="5dp"

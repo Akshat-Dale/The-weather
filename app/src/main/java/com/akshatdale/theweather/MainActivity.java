@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequestGetWeather);
     }
 
+//    CONVER UNIXA TIME FORMAT TO IST TIME FORMAT
     public String istConverter(Long seconds){
         // Unix seconds
         long unix_seconds = seconds;
@@ -205,4 +206,10 @@ public class MainActivity extends AppCompatActivity {
 
         return java_date;
     }
+
+//    SETTING WEATHER ICON ACCORDING TO WEATHER CONDITION
+//    public ImageView getWeatherIcon(){
+//
+//        return ImageView;
+//    }
 }
