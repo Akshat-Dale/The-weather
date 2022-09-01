@@ -17,7 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -25,8 +24,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+public class MainActivity extends AppCompatActivity {
+    private static final DecimalFormat df = new DecimalFormat("0.0");
     EditText cityEditText;
     TextView cityTextView,weatherConditionTextView,temperatureTextView,textViewSunriseTime,textViewSunsetTime,textViewWindSpeed,textViewHumidityPercentage;
     ImageView weatherImageView;
@@ -139,11 +142,20 @@ public class MainActivity extends AppCompatActivity {
                 try {
 //                    GETTING DATA FROM API AND SETTING TO SCREEN
                     currentTemperature = response.getJSONObject("main").getString("temp");
+                    double temperatureDouble = Double.parseDouble(currentTemperature);
+                    String currentTemperatureDigit = df.format(temperatureDouble);
                     currentHumidity = response.getJSONObject("main").getString("humidity");
                     sunriseToday = response.getJSONObject("sys").getString("sunrise");
                     sunsetToday = response.getJSONObject("sys").getString("sunset");
                     currentCity = response.getString("name");
-                    temperatureTextView.setText(String.format("%s°C", currentTemperature));
+                    temperatureTextView.setText(String.format("%s°C ", currentTemperatureDigit));
+                    textViewHumidityPercentage.setText(currentHumidity + "% ");
+                    cityTextView.setText(currentCity+"  ");
+//                    CONVERT TIME IN LONG AND SEND TO isConverter METHOD TO GET TIME IN IST
+                    Long sunriseTime = Long.parseLong(sunriseToday);
+                    Long sunsetTime = Long.parseLong(sunsetToday);
+                    textViewSunriseTime.setText(istConverter(sunriseTime));
+                    textViewSunsetTime.setText(istConverter(sunsetTime));
 //                    GETTING FROM ARRAY "weather" TO OBJECT AND GET STRING FROM OBJECT AND SET SETTEXT
                      JSONArray jsonArray = response.getJSONArray("weather");
                      JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -151,17 +163,20 @@ public class MainActivity extends AppCompatActivity {
                      currentWeatherDescriptionMain = jsonObject.getString("main");
                      currentWeatherIconId = jsonObject.getString("icon");
                      currentWindSpeed = response.getJSONObject("wind").getString("speed");
+
                      double windSpeedKM = ((Double.parseDouble(currentWindSpeed))*3.6 );
-                     weatherConditionTextView.setText(currentWeatherDescriptionMain);
-                     textViewWindSpeed.setText(windSpeedKM +" km/h ");
-                     textViewHumidityPercentage.setText(currentHumidity + "% ");
+                     String windSpeed2Digit = df.format(windSpeedKM);
+
+                     weatherConditionTextView.setText(currentWeatherDescriptionMain+"  ");
+                     textViewWindSpeed.setText(windSpeed2Digit +" km/h");
+
 
 
                     Log.d("WEATHER_DATA", "The temperature is :" + currentTemperature);
                     Log.d("WEATHER_DATA", "The WeatherIconId is :" + currentWeatherIconId);
                     Log.d("WEATHER_DATA", "The Humidity is :" + currentHumidity);
                     Log.d("WEATHER_DATA", "The description is :" + currentWeatherDescriptionMain);
-                    Log.d("WEATHER_DATA", "The wind is :" + windSpeedKM);
+                    Log.d("WEATHER_DATA", "The wind is :" + windSpeed2Digit);
                     Log.d("WEATHER_DATA", "The Sunrise/Sunset is :" + sunriseToday+"/"+sunsetToday);
                 } catch (JSONException e) {
                     Log.i("WEATHER_DATA","SOME ERROR IN RESPONSE WEATHER");
@@ -176,5 +191,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequestGetWeather);
+    }
+
+    public String istConverter(Long seconds){
+        // Unix seconds
+        long unix_seconds = seconds;
+        // convert seconds to milliseconds
+        Date date = new Date(unix_seconds * 1000L);
+        // format of the date
+        SimpleDateFormat jdf = new SimpleDateFormat("HH:mm");
+        String java_date = jdf.format(date);
+        System.out.println("\n" + java_date + "\n");
+
+        return java_date;
     }
 }
