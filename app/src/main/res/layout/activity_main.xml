@@ -29,9 +29,9 @@
             android:id="@+id/cityEditText"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/background_textview"
             android:ems="10"
             android:hint="Enter city"
@@ -69,7 +69,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="5dp"
-                android:drawableStart="@drawable/ic_baseline_location_on_24"
                 android:drawablePadding="5dp"
                 android:shadowColor="#62000000"
                 android:shadowDx="2"
@@ -77,7 +76,8 @@
                 android:shadowRadius="8"
                 android:text="Indore  "
                 android:textColor="#E72196F3"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                app:drawableStartCompat="@drawable/ic_baseline_location_on_24" />
 
             <TextView
                 android:id="@+id/weatherConditionTextView"
@@ -101,7 +101,7 @@
                 android:layout_gravity="start"
                 android:outlineAmbientShadowColor="@color/black"
                 android:outlineSpotShadowColor="@color/black"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:onClick="getWeatherDataCallAPI"
                 android:layout_marginTop="30dp"
                 app:srcCompat="@drawable/weatherlogo" />
@@ -125,22 +125,22 @@
                 android:id="@+id/textViewSunrise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="160dp"
-                android:drawableStart="@drawable/sunrise_icon"
                 android:drawablePadding="5dp"
                 android:gravity="start"
                 android:padding="5dp"
                 android:text="Sunrise"
                 android:textColor="#E72196F3"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableStartCompat="@drawable/sunrise_icon" />
 
             <TextView
                 android:id="@+id/textViewSunriseTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginLeft="115dp"
+                android:layout_marginStart="115dp"
                 android:layout_marginTop="160dp"
                 android:drawablePadding="5dp"
                 android:foregroundGravity="center"
@@ -159,10 +159,10 @@
                  android:layout_gravity="end"
                  android:padding="5dp"
                  android:textColor="#E72196F3"
-                 android:drawableStart="@drawable/sunset_icon"
-                 android:layout_marginTop="160dp"
-                 android:layout_marginRight="65sp"
-                 android:drawablePadding="5dp" />
+                android:layout_marginTop="160dp"
+                 android:layout_marginEnd="65sp"
+                 android:drawablePadding="5dp"
+                app:drawableStartCompat="@drawable/sunset_icon" />
 
 
             <TextView
@@ -175,7 +175,7 @@
                 android:padding="5dp"
                 android:textColor="#E72196F3"
                 android:layout_marginTop="160dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:drawablePadding="5dp" />
 
             <TextView
@@ -183,21 +183,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="195dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:padding="5dp"
                 android:gravity="start"
                 android:text="Windspeed"
                 android:textColor="#E72196F3"
                 android:textSize="20sp"
-                android:drawableStart="@drawable/wind_icon"
-                android:drawablePadding="5dp"/>
+                android:drawablePadding="5dp"
+                app:drawableStartCompat="@drawable/wind_icon" />
 
               <TextView
                   android:id="@+id/textViewWindSpeed"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="195dp"
-                  android:layout_marginLeft="150dp"
+                  android:layout_marginStart="150dp"
                   android:padding="5dp"
                   android:gravity="center"
                   android:text="10km/h"
@@ -209,22 +209,22 @@
                 android:id="@+id/textViewHumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="230dp"
-                android:drawableStart="@drawable/humidity_icon"
                 android:drawablePadding="5dp"
                 android:gravity="start"
                 android:padding="5dp"
                 android:text="Humidity"
                 android:textColor="#E72196F3"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:drawableStartCompat="@drawable/humidity_icon" />
 
             <TextView
                 android:id="@+id/textViewHumidityPercentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="230dp"
-                android:layout_marginLeft="135dp"
+                android:layout_marginStart="135dp"
                 android:padding="5dp"
                 android:gravity="center"
                 android:text="50%"

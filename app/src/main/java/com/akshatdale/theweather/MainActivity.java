@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,15 +32,16 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat df = new DecimalFormat("0.0");
     EditText cityEditText;
-    TextView cityTextView,weatherConditionTextView,temperatureTextView,textViewSunriseTime,textViewSunsetTime,textViewWindSpeed,textViewHumidityPercentage;
+    TextView cityTextView, weatherConditionTextView, temperatureTextView, textViewSunriseTime, textViewSunsetTime, textViewWindSpeed, textViewHumidityPercentage;
     ImageView weatherImageView;
     LinearLayout linearLayoutFirst;
     LinearLayoutManager layoutManagerForRecycleView;
     RecyclerView recyclerViewForecast;
     String cityLatitude;
     String cityLongitude;
-    String editTextCityName ,currentCity, currentTemperature, currentWeatherIconId,currentWindSpeed, currentWeatherDescriptionMain,currentHumidity,
-            sunriseToday,sunsetToday;
+    String editTextCityName, currentCity, currentTemperature, currentWeatherIconId, currentWindSpeed, currentWeatherDescriptionMain, currentHumidity,
+            sunriseToday, sunsetToday;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewForecast = findViewById(R.id.recyclerViewForecast);
 //
 //        SETTING HORIZONTAL LIST LAYOUT
-        layoutManagerForRecycleView = new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false);
+        layoutManagerForRecycleView = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
 //        SETTING LAYOUT IN RECYCLER VIEW
         recyclerViewForecast.setLayoutManager(layoutManagerForRecycleView);
         recyclerViewForecast.setItemAnimator(new DefaultItemAnimator());
@@ -68,71 +70,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-//    public void getLatLongCallAPI(View view){
-//
-//        RequestQueue requestQueue;
-//        requestQueue = Volley.newRequestQueue(MainActivity.this);
-//        Log.i("WEATHER_LATLONG",editTextCityName);
-//        String LatLongURL ="https://api.openweathermap.org/geo/1.0/direct?q="+ editTextCityName +"&limit=1&appid=b63f3db52cd36ca5cc60f382ff723087";
-//        JsonArrayRequest jsonArrayRequestLatLon = new JsonArrayRequest(Request.Method.GET, LatLongURL, null, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//                Log.i("WEATHER_LATLONG",response.toString());
-//
-//                for (int i = 0; i < response.length(); i++) {
-////                    if (!response.isNull(i)){
-////                        getWeatherDataCallAPI();
-////                    }else {
-////                        Log.i("WEATHER_LATLONG","LAT LONG NOT FOUND");
-////                    }
-//
-//                    try {
-//                        JSONObject jsonObject = response.getJSONObject(i);
-//                        String city = jsonObject.getString("name");
-////                        SETTING CITY NAME ON SCREEN
-//                         cityTextView.setText(city+"  ");
-////                         GETTING LAT LONG
-//                         cityLatitude = jsonObject.getString("lat");
-//                         cityLongitude = jsonObject.getString("lon");
-//
-//                        Log.i("WEATHER_LATLONG", city);
-//                        Log.i("WEATHER_LATLONG", cityLatitude);
-//                        Log.i("WEATHER_LATLONG", cityLongitude);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("WEATHER",error.toString());
-//            }
-//        });
-//        requestQueue.add(jsonArrayRequestLatLon);
-//        GETTING WEATHER DATA THROW LAT LONG
-//        if (cityLatitude != null && cityLongitude != null){
-//       }
-//    }
-
-
-//    GETTING DATA CURRENT WEATHER DATA FROM API
-    public void getWeatherDataCallAPI(View view){
+    //    GETTING DATA CURRENT WEATHER DATA FROM API
+    public void getWeatherDataCallAPI(View view) {
 //        GETTING CITY NAME FROM EDITTEXT
-                editTextCityName = cityEditText.getText().toString();
+        editTextCityName = cityEditText.getText().toString();
 //        GETTING WEATHER DATA THROW LAT LONG
         RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(MainActivity.this);
-//        String getWeatherURL = "https://api.openweathermap.org/data/2.5/weather?lat="+cityLatitude+"&lon="+cityLongitude+
-//                "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
 
         String getWeatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + editTextCityName + "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
-        Log.d("WEATHER_DATA", "The URL is :" + getWeatherURL);
+        Log.d("WEATHER_apiCall", "The URL is :" + getWeatherURL);
 
         JsonObjectRequest jsonObjectRequestGetWeather = new JsonObjectRequest(Request.Method.GET,
                 getWeatherURL, null, new Response.Listener<JSONObject>() {
@@ -150,66 +97,104 @@ public class MainActivity extends AppCompatActivity {
                     currentCity = response.getString("name");
                     temperatureTextView.setText(String.format("%s°C ", currentTemperatureDigit));
                     textViewHumidityPercentage.setText(currentHumidity + "% ");
-                    cityTextView.setText(currentCity+"  ");
-//                    CONVERT TIME IN LONG AND SEND TO isConverter METHOD TO GET TIME IN IST
-                    Long sunriseTime = Long.parseLong(sunriseToday);
-                    Long sunsetTime = Long.parseLong(sunsetToday);
-                    textViewSunriseTime.setText(istConverter(sunriseTime));
-                    textViewSunsetTime.setText(istConverter(sunsetTime));
+                    cityTextView.setText(currentCity + "  ");
+//                     SEND TO isConverter METHOD TO GET TIME IN IST
+                    textViewSunriseTime.setText(istConverter(sunriseToday));
+                    textViewSunsetTime.setText(istConverter(sunsetToday));
 //                    GETTING FROM ARRAY "weather" TO OBJECT AND GET STRING FROM OBJECT AND SET SETTEXT
-                     JSONArray jsonArray = response.getJSONArray("weather");
-                     JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    JSONArray jsonArray = response.getJSONArray("weather");
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-                     currentWeatherDescriptionMain = jsonObject.getString("main");
-                     currentWeatherIconId = jsonObject.getString("icon");
-                     currentWindSpeed = response.getJSONObject("wind").getString("speed");
+                    currentWeatherDescriptionMain = jsonObject.getString("main");
+                    currentWeatherIconId = jsonObject.getString("icon");
+                    currentWindSpeed = response.getJSONObject("wind").getString("speed");
 
-                     double windSpeedKM = ((Double.parseDouble(currentWindSpeed))*3.6 );
-                     String windSpeed2Digit = df.format(windSpeedKM);
+                    double windSpeedKM = ((Double.parseDouble(currentWindSpeed)) * 3.6);
+                    String windSpeed2Digit = df.format(windSpeedKM);
 
-                     weatherConditionTextView.setText(currentWeatherDescriptionMain+"  ");
-                     textViewWindSpeed.setText(windSpeed2Digit +" km/h");
+                    weatherConditionTextView.setText(currentWeatherDescriptionMain + "  ");
+                    textViewWindSpeed.setText(windSpeed2Digit + " km/h");
 
-
-
-                    Log.d("WEATHER_DATA", "The temperature is :" + currentTemperature);
-                    Log.d("WEATHER_DATA", "The WeatherIconId is :" + currentWeatherIconId);
-                    Log.d("WEATHER_DATA", "The Humidity is :" + currentHumidity);
-                    Log.d("WEATHER_DATA", "The description is :" + currentWeatherDescriptionMain);
-                    Log.d("WEATHER_DATA", "The wind is :" + windSpeed2Digit);
-                    Log.d("WEATHER_DATA", "The Sunrise/Sunset is :" + sunriseToday+"/"+sunsetToday);
                 } catch (JSONException e) {
-                    Log.i("WEATHER_DATA","SOME ERROR IN RESPONSE WEATHER");
+                    Log.i("WEATHER_apiCall", "SOME ERROR IN RESPONSE WEATHER");
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("WEATHER_DATA", "SOMETHING WENT WRONG IN WEATHER DATA");
+                Log.d("WEATHER_apiCall", "SOMETHING WENT WRONG IN WEATHER DATA");
             }
         });
 
         requestQueue.add(jsonObjectRequestGetWeather);
+//        CALLING ANOTHER API PARALLEL TO GET FORECAST DATA
+        getForecastWeatherData();
     }
 
-//    CONVER UNIXA TIME FORMAT TO IST TIME FORMAT
-    public String istConverter(Long seconds){
+    //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
+    public String istConverter(String seconds) {
         // Unix seconds
-        long unix_seconds = seconds;
+        long unix_seconds = Long.parseLong(seconds);
         // convert seconds to milliseconds
         Date date = new Date(unix_seconds * 1000L);
         // format of the date
-        SimpleDateFormat jdf = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("HH:mm");
         String java_date = jdf.format(date);
         System.out.println("\n" + java_date + "\n");
 
         return java_date;
     }
 
-//    SETTING WEATHER ICON ACCORDING TO WEATHER CONDITION
-//    public ImageView getWeatherIcon(){
-//
-//        return ImageView;
-//    }
+    public void getForecastWeatherData(){
+
+        String forecastWeatherUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + editTextCityName+ "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
+        Log.i("WEATHER_DATA_Forecast",forecastWeatherUrl);
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, forecastWeatherUrl,
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i("WEATHER_DATA_Forecast", (String) response.get("cod"));
+                    JSONArray jsonArray = response.getJSONArray("list");
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String dateTime = istConverter(jsonObject.getString("dt"));
+                        String temperature = jsonObject.getJSONObject("main").getString("temp");
+                        double temperatureDouble = Double.parseDouble(temperature);
+                        String temperatureDigit = df.format(temperatureDouble);
+                        Log.i("WEATHER_DATA_Forecast", "Date " + dateTime + " Temp. " + temperatureDigit);
+
+                        JSONArray jsonArrayWeather = jsonObject.getJSONArray("weather");
+                        JSONObject jsonObjectWeather = jsonArrayWeather.getJSONObject(0);
+                        String descriptionMain = jsonObjectWeather.getString("main");
+                        String description = jsonObjectWeather.getString("description");
+                        String iconId = jsonObjectWeather.getString("icon");
+                        Log.i("WEATHER_DATA_Forecast", "Description " + descriptionMain + " IconId. " + iconId +" Descrition  " +description);
+                    }
+                } catch (JSONException e) {
+                    Log.e("WEATHER_DATA_Forecast","SOME ERROR TO GET DATA FROM API"+e);
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("WEATHER_DATA_Forecast",error.toString());
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public ImageView setWeatherImageView(String weatherIconId) {
+//        https://www.flaticon.com/packs/weather-400?word=weather%20forecast
+
+        return weatherImageView;
+    }
 }
