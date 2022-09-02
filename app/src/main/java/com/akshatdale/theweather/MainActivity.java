@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,10 +38,9 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout linearLayoutFirst;
     LinearLayoutManager layoutManagerForRecycleView;
     RecyclerView recyclerViewForecast;
-    String cityLatitude;
-    String cityLongitude;
     String editTextCityName, currentCity, currentTemperature, currentWeatherIconId, currentWindSpeed, currentWeatherDescriptionMain, currentHumidity,
             sunriseToday, sunsetToday;
+    ArrayList<SetForecastWeatherData> setForecastWeatherDataArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
 //        SETTING LAYOUT IN RECYCLER VIEW
         recyclerViewForecast.setLayoutManager(layoutManagerForRecycleView);
         recyclerViewForecast.setItemAnimator(new DefaultItemAnimator());
-//        GETTING CITY NAME FROM EditText
 
+        setForecastWeatherDataArrayList = new ArrayList<>();
     }
 
 
@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
                     textViewHumidityPercentage.setText(currentHumidity + "% ");
                     cityTextView.setText(currentCity + "  ");
 //                     SEND TO isConverter METHOD TO GET TIME IN IST
-                    textViewSunriseTime.setText(istConverter(sunriseToday));
-                    textViewSunsetTime.setText(istConverter(sunsetToday));
+                    textViewSunriseTime.setText(istTimeConverter(sunriseToday));
+                    textViewSunsetTime.setText(istTimeConverter(sunsetToday));
 //                    GETTING FROM ARRAY "weather" TO OBJECT AND GET STRING FROM OBJECT AND SET SETTEXT
                     JSONArray jsonArray = response.getJSONArray("weather");
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
@@ -133,17 +133,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
-    public String istConverter(String seconds) {
+    public String istTimeConverter(String seconds) {
         // Unix seconds
         long unix_seconds = Long.parseLong(seconds);
         // convert seconds to milliseconds
         Date date = new Date(unix_seconds * 1000L);
         // format of the date
         @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("HH:mm");
-        String java_date = jdf.format(date);
-        System.out.println("\n" + java_date + "\n");
+        String time = jdf.format(date);
+        System.out.println("\n" + time + "\n");
 
-        return java_date;
+//        IT RETURN TIME
+        return time;
+    }
+
+    //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
+    public String istDateConverter(String seconds) {
+        // Unix seconds
+        long unix_seconds = Long.parseLong(seconds);
+        // convert seconds to milliseconds
+        Date date = new Date(unix_seconds * 1000L);
+        // format of the date
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("dd.MM.yy");
+        String dateOnly = jdf.format(date);
+        System.out.println("\n" + dateOnly + "\n");
+//        IT RETURN DATE
+        return dateOnly;
     }
 
     public void getForecastWeatherData(){
@@ -164,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String dateTime = istConverter(jsonObject.getString("dt"));
+                        String dateTime = jsonObject.getString("dt");
                         String temperature = jsonObject.getJSONObject("main").getString("temp");
                         double temperatureDouble = Double.parseDouble(temperature);
                         String temperatureDigit = df.format(temperatureDouble);
@@ -175,6 +190,15 @@ public class MainActivity extends AppCompatActivity {
                         String descriptionMain = jsonObjectWeather.getString("main");
                         String description = jsonObjectWeather.getString("description");
                         String iconId = jsonObjectWeather.getString("icon");
+                        setWeatherImageView(iconId);
+                        String dateIst = istDateConverter(dateTime);
+                        String timeIst = istTimeConverter(dateTime);
+
+//                        SETTING DATA ON REECYCLER VIEW
+                        setForecastWeatherDataArrayList.add(new SetForecastWeatherData(timeIst,dateIst,temperature));
+
+                        ForecastRecycleAdapter forecastRecycleAdapter = new ForecastRecycleAdapter(MainActivity.this,setForecastWeatherDataArrayList);
+                        recyclerViewForecast.setAdapter(forecastRecycleAdapter);
                         Log.i("WEATHER_DATA_Forecast", "Description " + descriptionMain + " IconId. " + iconId +" Descrition  " +description);
                     }
                 } catch (JSONException e) {
@@ -191,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
         });
         requestQueue.add(jsonObjectRequest);
     }
+
+
 
     public ImageView setWeatherImageView(String weatherIconId) {
 //        https://www.flaticon.com/packs/weather-400?word=weather%20forecast

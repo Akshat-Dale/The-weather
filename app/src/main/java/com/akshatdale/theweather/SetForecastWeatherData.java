@@ -1,13 +1,21 @@
 package com.akshatdale.theweather;
 
-public class SetForecastWeatherData {
-     String temperature;
-     String iconId;
-     String weatherDescription;
+import android.widget.ImageView;
 
-    public SetForecastWeatherData(String temperature, String iconId, String weatherDescription) {
+public class SetForecastWeatherData {
+     String time;
+     String date;
+     String temperature;
+//     int weatherImage;
+
+
+
+    public SetForecastWeatherData(String time,String date, String temperature) {
+        this.time = time;
+        this.date = date;
         this.temperature = temperature;
-        this.iconId = iconId;
-        this.weatherDescription = weatherDescription;
+//        this.weatherImage = weatherImage;
+
+
     }
 }
