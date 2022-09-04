@@ -10,16 +10,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat df = new DecimalFormat("0.0");
     public static final int REQUEST_CODE = 100;
     EditText cityEditText;
+//    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
     TextView cityTextView, weatherConditionTextView, temperatureTextView, textViewSunriseTime, textViewSunsetTime, textViewWindSpeed, textViewHumidityPercentage;
     ImageView weatherImageView;
     LinearLayout linearLayoutFirst;
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             sunriseToday, sunsetToday;
     ArrayList<SetForecastWeatherData> setForecastWeatherDataArrayList;
     SwipeRefreshLayout swipeRefresh;
+    int currentIconId,forecastIconId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
 //        SETTING LAYOUT IN RECYCLER VIEW
         recyclerViewForecast.setLayoutManager(layoutManagerForRecycleView);
         recyclerViewForecast.setItemAnimator(new DefaultItemAnimator());
-
         setForecastWeatherDataArrayList = new ArrayList<>();
-//        BELOW METHOD HAVE SHAREDPREFRENCR WHICH STORE LAST SEARCH CITY
+//        CHECK INTERNET CONNECTIVITY
+//        checkInternet();
 
 //        GETTING CURRENT LOCATION
         String currentLocation = getLocation();
@@ -99,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-
-
                 String currentLocation = getLocation();
                 Log.i("WEATHER_DATA_location",currentLocation);
 //        CALLING API TO GET CURRENT AND FORECAST DATA
@@ -108,15 +111,24 @@ public class MainActivity extends AppCompatActivity {
                 getForecastWeatherData(currentLocation);
 
                 swipeRefresh.setColorSchemeColors(Color.RED);
-                swipeRefresh.setSoundEffectsEnabled(true);
+                  swipeRefresh.setSoundEffectsEnabled(true);
                 swipeRefresh.setRefreshing(false);
             }
         });
 
     }
-//    GETTING DATABASE REFERENCE
-    WeatherDatabase weatherDatabase = new WeatherDatabase(this);
-
+//
+////    CHECKING INTERNET CONNECTION
+//public void checkInternet(){
+//        ConnectivityManager connectivityManager = (ConnectivityManager)  getSystemService(CONNECTIVITY_SERVICE);
+//        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState()==NetworkInfo.State.DISCONNECTED
+//                ||connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState()==NetworkInfo.State.DISCONNECTED){
+//            Toast.makeText(getApplicationContext(), "Check internet connection", Toast.LENGTH_SHORT).show();
+//
+//        }
+//        else{
+//            Toast.makeText(getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
+//        }
 
 
 
@@ -155,8 +167,9 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
 
                     currentWeatherDescriptionMain = jsonObject.getString("main");
-                    currentWeatherIconId = jsonObject.getString("icon");
-                    currentWindSpeed = response.getJSONObject("wind").getString("speed");
+                     currentIconId = jsonObject.getInt("id");
+                     weatherImageView.setImageResource(setWeatherImageView(currentIconId));
+                     currentWindSpeed = response.getJSONObject("wind").getString("speed");
 
                     double windSpeedKM = ((Double.parseDouble(currentWindSpeed)) * 3.6);
                     String windSpeed2Digit = df.format(windSpeedKM);
@@ -204,24 +217,25 @@ public class MainActivity extends AppCompatActivity {
                         String temperature = jsonObject.getJSONObject("main").getString("temp");
                         double temperatureDouble = Double.parseDouble(temperature);
                         String temperatureDigit = df.format(temperatureDouble);
-                        Log.i("WEATHER_DATA_Forecast", "Date " + dateTime + " Temp. " + temperatureDigit);
+//                        Log.i("WEATHER_DATA_Forecast", "Date " + dateTime + " Temp. " + temperatureDigit);
 
                         JSONArray jsonArrayWeather = jsonObject.getJSONArray("weather");
                         JSONObject jsonObjectWeather = jsonArrayWeather.getJSONObject(0);
                         String descriptionMain = jsonObjectWeather.getString("main");
                         String description = jsonObjectWeather.getString("description");
                         String icon = jsonObjectWeather.getString("icon");
-                        String iconId = jsonObjectWeather.getString("id");
-                        setWeatherImageView(iconId);
+                         int forecastIconId = jsonObjectWeather.getInt("id");
+//                        SETTING WEATHER ICON
+
                         String dateIst = istDateConverter(dateTime);
                         String timeIst = istTimeConverter(dateTime);
 
 //                        SETTING DATA ON REECYCLER VIEW
-                        setForecastWeatherDataArrayList.add(new SetForecastWeatherData(timeIst,dateIst,temperature));
+                        setForecastWeatherDataArrayList.add(new SetForecastWeatherData(timeIst,dateIst,temperature,setWeatherImageView(forecastIconId)));
 
                         ForecastRecycleAdapter forecastRecycleAdapter = new ForecastRecycleAdapter(MainActivity.this,setForecastWeatherDataArrayList);
                         recyclerViewForecast.setAdapter(forecastRecycleAdapter);
-                        Log.i("WEATHER_DATA_Forecast", "Description " + descriptionMain + " Icon. " + icon  + " IconId. " + iconId+" Descrition  " +description);
+                        Log.i("WEATHER_DATA_Forecast", "Description " + descriptionMain + " Icon. " + icon  + " IconId. "+forecastIconId+" Descrition  " +description);
                     }
                 } catch (JSONException e) {
                     Log.e("WEATHER_DATA_Forecast","SOME ERROR TO GET DATA FROM API"+e);
@@ -269,18 +283,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public int setWeatherImageView(String weatherIconId) {
-//        https://www.flaticon.com/packs/weather-400?word=weather%20forecast
 
-        return 0;
-    }
-
+//    GETTING TEXT FROM EDITTEXT THAT GIVE USER
     public void userEnterCity(View view){
         String city = cityEditText.getText().toString();
         if (city.isEmpty()){
             Toast.makeText(getApplicationContext(), "Enter city name", Toast.LENGTH_SHORT).show();
         }
         else{
+//            REMOVE CITY FORECAST VIEW, THAT ARE STORED FROM LOCATION
+            setForecastWeatherDataArrayList.clear();
             getWeatherDataCallAPI(city);
             getForecastWeatherData(city);
         }
@@ -347,6 +359,121 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+    //SET WEATHER ICON ON WEATHER IMAGE VIEW
+    public int setWeatherImageView(int iconId) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("HH");
+        Date date = new Date();
+        int time = Integer.parseInt(formatter.format(date));
+        Log.i("WEATHER_DATA_Time", String.valueOf(time));
+        int icon = 0;
+        try {
+
+
+//        DAY ICON AND BACKGROUND
+            if (time >= 6 && time < 18) {
+                linearLayoutFirst.setBackgroundResource(R.drawable.day_background);
+                if (iconId == 800) {
+                    icon = R.drawable.clear_day;
+
+                } else if (iconId == 801) {
+
+                    icon = R.drawable.fewcloud_day;
+                } else if (iconId == 802) {
+
+                    icon = R.drawable.scatteredcloud_day;
+                } else if (iconId == 803 || iconId == 804) {
+
+                    icon = R.drawable.overcast_cloud;
+                } else if (iconId >= 701 && iconId <= 781) {
+
+                    icon = R.drawable.mist_day;
+                } else if (iconId >= 600 && iconId <= 622) {
+
+                    icon = R.drawable.snow;
+                } else if (iconId == 500 || iconId == 501 || iconId == 520 || iconId == 521 || iconId == 522) {
+
+                    icon = R.drawable.lightrain_day;
+                } else if (iconId == 502 || iconId == 503 || iconId == 504 || iconId == 531) {
+
+                    icon = R.drawable.heavy_rain;
+                } else if (iconId == 511) {
+
+                    icon = R.drawable.freezing_rain;
+                } else if (iconId >= 300 && iconId <= 321) {
+
+                    icon = R.drawable.drizziling;
+                } else if (iconId == 200 || iconId == 201 || iconId == 202 || iconId == 221 || iconId == 230 || iconId == 231 || iconId == 232) {
+
+                    icon = R.drawable.thunderstrom_rain;
+                } else if (iconId == 210 || iconId == 211) {
+
+                    icon = R.drawable.thunderstrom_day;
+                } else if (iconId == 212) {
+
+                    icon = R.drawable.heavythunderstrom_day;
+                } else {
+
+                    icon = R.drawable.weatherlogo;
+                }
+
+            }
+//        NIGHT ICON AND BACKGROUND
+            else {
+                linearLayoutFirst.setBackgroundResource(R.drawable.night_background);
+                if (iconId == 800) {
+
+                    icon = R.drawable.clear_night;
+                } else if (iconId == 801) {
+
+                    icon = R.drawable.fewcloud_night;
+                } else if (iconId == 802) {
+
+                    icon = R.drawable.scatteredcloud_night;
+                } else if (iconId == 803 || iconId == 804) {
+
+                    icon = R.drawable.overcast_cloud;
+                } else if (iconId >= 701 && iconId <= 781) {
+
+                    icon = R.drawable.mist_night;
+                } else if (iconId >= 600 && iconId <= 622) {
+
+                    icon = R.drawable.snow;
+                } else if (iconId == 500 || iconId == 501 || iconId == 520 || iconId == 521 || iconId == 522) {
+
+                    icon = R.drawable.lightrain_night;
+                } else if (iconId == 502 || iconId == 503 || iconId == 504 || iconId == 531) {
+
+                    icon = R.drawable.heavy_rain;
+                } else if (iconId == 511) {
+
+                    icon = R.drawable.freezing_rain;
+                } else if (iconId >= 300 && iconId <= 321) {
+
+                    icon = R.drawable.drizziling;
+                } else if (iconId == 200 || iconId == 201 || iconId == 202 || iconId == 221 || iconId == 230 || iconId == 231 || iconId == 232) {
+
+                    icon = R.drawable.thunderstrom_rain;
+                } else if (iconId == 210 || iconId == 211) {
+
+                    icon = R.drawable.thunderstrom_night;
+                } else if (iconId == 212) {
+
+                    icon = R.drawable.heavythunderstrom_night;
+                } else {
+
+                    icon = R.drawable.weatherlogo;
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            Log.i("WEATHER_DATA_iconSet", e.toString());
+        }
+        return icon;
+    }
 }
-
-

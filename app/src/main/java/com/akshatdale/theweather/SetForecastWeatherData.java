@@ -6,15 +6,15 @@ public class SetForecastWeatherData {
      String time;
      String date;
      String temperature;
-//     int weatherImage;
+     int weatherIcon;
 
 
 
-    public SetForecastWeatherData(String time,String date, String temperature) {
+    public SetForecastWeatherData(String time,String date, String temperature,int weatherIcon) {
         this.time = time;
         this.date = date;
         this.temperature = temperature;
-//        this.weatherImage = weatherImage;
+        this.weatherIcon = weatherIcon;
 
 
     }

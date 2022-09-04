@@ -50,7 +50,7 @@
            android:layout_height="50dp"
            android:layout_gravity="center"
            android:layout_marginBottom="2dp"
-           android:src="@drawable/newicon" />
+           android:src="@drawable/weatherlogo" />
 
        <TextView
            android:id="@+id/textviewForescastTemperature"

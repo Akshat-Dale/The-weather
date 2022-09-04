@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,21 +46,22 @@ public class ForecastRecycleAdapter extends RecyclerView.Adapter<ForecastRecycle
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
-
+MainActivity mainActivity = new MainActivity();
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
           holder.time.setText(forecastWeatherDataArrayList.get(position).time);
           holder.date.setText(forecastWeatherDataArrayList.get(position).date);
           holder.temperature.setText(forecastWeatherDataArrayList.get(position).temperature+"°C");
-//         holder.weatherImage.setImageResource(forecastWeatherDataArrayList.get(position).weatherImage);
+          holder.weatherImage.setImageResource(forecastWeatherDataArrayList.get(position).weatherIcon);
+
+
     }
 
     @Override
     public int getItemCount() {
         return forecastWeatherDataArrayList.size();
     }
-
 
 
 }
