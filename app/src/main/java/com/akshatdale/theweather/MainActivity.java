@@ -1,11 +1,22 @@
 package com.akshatdale.theweather;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,13 +37,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat df = new DecimalFormat("0.0");
+    public static final int REQUEST_CODE = 100;
     EditText cityEditText;
     TextView cityTextView, weatherConditionTextView, temperatureTextView, textViewSunriseTime, textViewSunsetTime, textViewWindSpeed, textViewHumidityPercentage;
     ImageView weatherImageView;
@@ -41,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     String editTextCityName, currentCity, currentTemperature, currentWeatherIconId, currentWindSpeed, currentWeatherDescriptionMain, currentHumidity,
             sunriseToday, sunsetToday;
     ArrayList<SetForecastWeatherData> setForecastWeatherDataArrayList;
+    SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         weatherImageView = findViewById(R.id.weatherImageView);
         linearLayoutFirst = findViewById(R.id.linearLayoutFirst);
         recyclerViewForecast = findViewById(R.id.recyclerViewForecast);
+        swipeRefresh = findViewById(R.id.swipeRefresh);
 //
 //        SETTING HORIZONTAL LIST LAYOUT
         layoutManagerForRecycleView = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -67,18 +85,49 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewForecast.setItemAnimator(new DefaultItemAnimator());
 
         setForecastWeatherDataArrayList = new ArrayList<>();
+//        BELOW METHOD HAVE SHAREDPREFRENCR WHICH STORE LAST SEARCH CITY
+
+//        GETTING CURRENT LOCATION
+        String currentLocation = getLocation();
+        Log.i("WEATHER_DATA_location",currentLocation);
+//        CALLING API TO GET CURRENT AND FORECAST DATA
+       getWeatherDataCallAPI(currentLocation);
+       getForecastWeatherData(currentLocation);
+
+//       WHILE SWIPE FROM TOP LOCATION REFRESH getLocation() called
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+
+
+                String currentLocation = getLocation();
+                Log.i("WEATHER_DATA_location",currentLocation);
+//        CALLING API TO GET CURRENT AND FORECAST DATA
+                getWeatherDataCallAPI(currentLocation);
+                getForecastWeatherData(currentLocation);
+
+                swipeRefresh.setColorSchemeColors(Color.RED);
+                swipeRefresh.setSoundEffectsEnabled(true);
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+
     }
+//    GETTING DATABASE REFERENCE
+    WeatherDatabase weatherDatabase = new WeatherDatabase(this);
+
+
 
 
     //    GETTING DATA CURRENT WEATHER DATA FROM API
-    public void getWeatherDataCallAPI(View view) {
-//        GETTING CITY NAME FROM EDITTEXT
-        editTextCityName = cityEditText.getText().toString();
+    public void getWeatherDataCallAPI(String cityName) {
+
 //        GETTING WEATHER DATA THROW LAT LONG
         RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(MainActivity.this);
 
-        String getWeatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + editTextCityName + "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
+        String getWeatherURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
         Log.d("WEATHER_apiCall", "The URL is :" + getWeatherURL);
 
         JsonObjectRequest jsonObjectRequestGetWeather = new JsonObjectRequest(Request.Method.GET,
@@ -128,42 +177,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestQueue.add(jsonObjectRequestGetWeather);
-//        CALLING ANOTHER API PARALLEL TO GET FORECAST DATA
-        getForecastWeatherData();
+
     }
 
-    //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
-    public String istTimeConverter(String seconds) {
-        // Unix seconds
-        long unix_seconds = Long.parseLong(seconds);
-        // convert seconds to milliseconds
-        Date date = new Date(unix_seconds * 1000L);
-        // format of the date
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("HH:mm");
-        String time = jdf.format(date);
-        System.out.println("\n" + time + "\n");
 
-//        IT RETURN TIME
-        return time;
-    }
 
-    //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
-    public String istDateConverter(String seconds) {
-        // Unix seconds
-        long unix_seconds = Long.parseLong(seconds);
-        // convert seconds to milliseconds
-        Date date = new Date(unix_seconds * 1000L);
-        // format of the date
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("dd.MM.yy");
-        String dateOnly = jdf.format(date);
-        System.out.println("\n" + dateOnly + "\n");
-//        IT RETURN DATE
-        return dateOnly;
-    }
+    public void getForecastWeatherData(String cityName){
 
-    public void getForecastWeatherData(){
-
-        String forecastWeatherUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + editTextCityName+ "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
+        String forecastWeatherUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName+ "&appid=b63f3db52cd36ca5cc60f382ff723087&units=metric";
         Log.i("WEATHER_DATA_Forecast",forecastWeatherUrl);
         RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
@@ -189,7 +210,8 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonObjectWeather = jsonArrayWeather.getJSONObject(0);
                         String descriptionMain = jsonObjectWeather.getString("main");
                         String description = jsonObjectWeather.getString("description");
-                        String iconId = jsonObjectWeather.getString("icon");
+                        String icon = jsonObjectWeather.getString("icon");
+                        String iconId = jsonObjectWeather.getString("id");
                         setWeatherImageView(iconId);
                         String dateIst = istDateConverter(dateTime);
                         String timeIst = istTimeConverter(dateTime);
@@ -199,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
                         ForecastRecycleAdapter forecastRecycleAdapter = new ForecastRecycleAdapter(MainActivity.this,setForecastWeatherDataArrayList);
                         recyclerViewForecast.setAdapter(forecastRecycleAdapter);
-                        Log.i("WEATHER_DATA_Forecast", "Description " + descriptionMain + " IconId. " + iconId +" Descrition  " +description);
+                        Log.i("WEATHER_DATA_Forecast", "Description " + descriptionMain + " Icon. " + icon  + " IconId. " + iconId+" Descrition  " +description);
                     }
                 } catch (JSONException e) {
                     Log.e("WEATHER_DATA_Forecast","SOME ERROR TO GET DATA FROM API"+e);
@@ -217,10 +239,114 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
+    public String istTimeConverter(String seconds) {
+        // Unix seconds
+        long unix_seconds = Long.parseLong(seconds);
+        // convert seconds to milliseconds
+        Date date = new Date(unix_seconds * 1000L);
+        // format of the date
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("HH:mm");
+        String time = jdf.format(date);
+        System.out.println("\n" + time + "\n");
 
-    public ImageView setWeatherImageView(String weatherIconId) {
+//        IT RETURN TIME
+        return time;
+    }
+
+    //    CONVERT UNIX TIME FORMAT TO IST TIME FORMAT
+    public String istDateConverter(String seconds) {
+        // Unix seconds
+        long unix_seconds = Long.parseLong(seconds);
+        // convert seconds to milliseconds
+        Date date = new Date(unix_seconds * 1000L);
+        // format of the date
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat jdf = new SimpleDateFormat("dd/MM");
+        String dateOnly = jdf.format(date);
+        System.out.println("\n" + dateOnly + "\n");
+//        IT RETURN DATE
+        return dateOnly;
+    }
+
+
+    public int setWeatherImageView(String weatherIconId) {
 //        https://www.flaticon.com/packs/weather-400?word=weather%20forecast
 
-        return weatherImageView;
+        return 0;
+    }
+
+    public void userEnterCity(View view){
+        String city = cityEditText.getText().toString();
+        if (city.isEmpty()){
+            Toast.makeText(getApplicationContext(), "Enter city name", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            getWeatherDataCallAPI(city);
+            getForecastWeatherData(city);
+        }
+    }
+
+
+
+
+//    GETTING USER LOCTION BY GPS
+    public String getLocation(){
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        CHEKING PERMISSION FOR LOCATION
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+         && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+//            REQUEST FOR PERMISSION WITH DAILOG BOX
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION
+                    , Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+        }
+
+
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+
+            String cityName = "Not Found";
+            Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(latitude,longitude,10);
+                for (Address address:addressList) {
+                    if (address != null) {
+                        String city = address.getLocality();
+                        Log.i("WEATHER_DATA_location", "Location is " + city);
+                        if (city != null && !city.equals("")) {
+                            cityName = city;
+                        } else {
+                            Toast.makeText(getApplicationContext(), "City Not Found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        Log.i("WEATHER_DATA_location","Location is "+cityName);
+        return cityName;
+          }
+
+
+
+
+//CHECKING LOCATION PERMISSION RESULT
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode==REQUEST_CODE){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 }
+
+

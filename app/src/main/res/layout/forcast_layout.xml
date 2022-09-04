@@ -13,23 +13,24 @@
     app:layout_constraintTop_toTopOf="parent">
    <androidx.cardview.widget.CardView
         android:id="@+id/forecastCardView"
-        android:layout_width="145dp"
-        android:layout_height="185dp"
-        app:cardElevation="8dp"
-       android:backgroundTint="#FEFEFE"
-        app:cardCornerRadius="15dp"
-    app:cardUseCompatPadding="true">
+        android:layout_width="115dp"
+        android:layout_height="150dp"
+       android:backgroundTint="#EFFEFEFE"
+       app:cardUseCompatPadding="true"
+       app:cardElevation="3dp"
+        app:cardCornerRadius="20dp">
 
 
        <TextView
            android:id="@+id/textviewForescastDate"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="01-09-22"
+           android:text="01/09"
            android:textColor="#E72196F3"
-           android:textSize="13sp"
+           android:textSize="10dp"
            android:layout_gravity="center"
-           android:layout_marginBottom="65sp"
+           android:layout_marginBottom="55dp"
+
            />
 
        <TextView
@@ -38,9 +39,9 @@
            android:layout_height="wrap_content"
            android:text="12:00"
            android:textColor="#E72196F3"
-           android:textSize="18dp"
+           android:textSize="15dp"
              android:layout_gravity="center"
-           android:layout_marginBottom="48dp"
+        android:layout_marginBottom="40dp"
             />
 
        <ImageView
@@ -57,12 +58,12 @@
            android:layout_height="wrap_content"
            android:text="0.0°C"
            android:textColor="#E72196F3"
-           android:textSize="27sp"
+           android:textSize="20sp"
            android:shadowColor="#62000000"
            android:shadowRadius="9"
            android:shadowDx="5"
            android:shadowDy="5"
-           android:layout_marginTop="48dp"
+           android:layout_marginTop="45dp"
            android:layout_gravity="center"/>
 
 

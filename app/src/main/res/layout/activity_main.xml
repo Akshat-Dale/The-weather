@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
     <LinearLayout
         android:id="@+id/linearLayoutFirst"
         android:layout_width="match_parent"
@@ -19,6 +28,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,20 +56,19 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/ic_baseline_search_24"
-                android:onClick="getWeatherDataCallAPI" />
+                android:onClick="userEnterCity" />
         </LinearLayout>
-
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
-            android:backgroundTint="#FCFCFC"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true">
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#F4FCFCFC"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="20dp">
 
             <TextView
                 android:id="@+id/cityTextView"
@@ -97,7 +107,6 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:onClick="getWeatherDataCallAPI"
                 android:outlineAmbientShadowColor="@color/black"
                 android:outlineSpotShadowColor="@color/black"
                 app:srcCompat="@drawable/newmooon" />
@@ -236,5 +245,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
