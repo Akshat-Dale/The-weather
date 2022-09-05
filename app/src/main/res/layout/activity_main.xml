@@ -25,7 +25,7 @@
             android:id="@+id/linearLayoutFirst"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FF9800"
+            android:background="@drawable/day_background"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -55,11 +55,12 @@
                     android:textColor="@color/white"
                     android:textColorHint="#A7FFFFFF" />
 
-                <Button
+                <ImageButton
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/ic_baseline_search_24"
+                    android:backgroundTint="@color/white"
                     android:onClick="userEnterCity" />
             </LinearLayout>
 
@@ -111,9 +112,7 @@
                     android:layout_gravity="start"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="30dp"
-                    android:outlineAmbientShadowColor="@color/black"
-                    android:outlineSpotShadowColor="@color/black"
-                    app:srcCompat="@drawable/weatherlogo" />
+                    android:transformPivotX="20dp" />
 
                 <TextView
                     android:id="@+id/temperatureTextView"

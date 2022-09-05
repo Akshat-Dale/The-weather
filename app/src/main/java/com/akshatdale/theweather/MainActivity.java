@@ -52,13 +52,12 @@ public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat df = new DecimalFormat("0.0");
     public static final int REQUEST_CODE = 100;
     EditText cityEditText;
-//    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
     TextView cityTextView, weatherConditionTextView, temperatureTextView, textViewSunriseTime, textViewSunsetTime, textViewWindSpeed, textViewHumidityPercentage;
     ImageView weatherImageView;
     LinearLayout linearLayoutFirst;
     LinearLayoutManager layoutManagerForRecycleView;
     RecyclerView recyclerViewForecast;
-    String editTextCityName, currentCity, currentTemperature, currentWeatherIconId, currentWindSpeed, currentWeatherDescriptionMain, currentHumidity,
+    String  currentCity, currentTemperature, currentWindSpeed, currentWeatherDescriptionMain, currentHumidity,
             sunriseToday, sunsetToday;
     ArrayList<SetForecastWeatherData> setForecastWeatherDataArrayList;
     SwipeRefreshLayout swipeRefresh;
@@ -92,12 +91,15 @@ public class MainActivity extends AppCompatActivity {
 //        CHECK INTERNET CONNECTIVITY
 //        checkInternet();
 
+//        SET WEATHER BACKGROUND
+        setWeatherBackground();
 //        GETTING CURRENT LOCATION
         String currentLocation = getLocation();
         Log.i("WEATHER_DATA_location",currentLocation);
 //        CALLING API TO GET CURRENT AND FORECAST DATA
        getWeatherDataCallAPI(currentLocation);
        getForecastWeatherData(currentLocation);
+
 
 //       WHILE SWIPE FROM TOP LOCATION REFRESH getLocation() called
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -168,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                     currentWeatherDescriptionMain = jsonObject.getString("main");
                      currentIconId = jsonObject.getInt("id");
-                     weatherImageView.setImageResource(setWeatherImageView(currentIconId));
+                     weatherImageView.setImageResource(new SetWeatherIcon().setIconCurrent(currentIconId));
                      currentWindSpeed = response.getJSONObject("wind").getString("speed");
 
                     double windSpeedKM = ((Double.parseDouble(currentWindSpeed)) * 3.6);
@@ -230,8 +232,8 @@ public class MainActivity extends AppCompatActivity {
                         String dateIst = istDateConverter(dateTime);
                         String timeIst = istTimeConverter(dateTime);
 
-//                        SETTING DATA ON REECYCLER VIEW
-                        setForecastWeatherDataArrayList.add(new SetForecastWeatherData(timeIst,dateIst,temperature,setWeatherImageView(forecastIconId)));
+//                        SETTING DATA ON REECYCLER VIEW AND SEND ICON DETAIL TO SetWeatherIcon CLASS WHICH RETURN RIGHT ICON ID FOR SET
+                        setForecastWeatherDataArrayList.add(new SetForecastWeatherData(timeIst,dateIst,temperature,new SetWeatherIcon().setForecastIcon(forecastIconId,dateTime)));
 
                         ForecastRecycleAdapter forecastRecycleAdapter = new ForecastRecycleAdapter(MainActivity.this,setForecastWeatherDataArrayList);
                         recyclerViewForecast.setAdapter(forecastRecycleAdapter);
@@ -363,117 +365,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     //SET WEATHER ICON ON WEATHER IMAGE VIEW
-    public int setWeatherImageView(int iconId) {
+    public void setWeatherBackground() {
 
+        int time =0;
         SimpleDateFormat formatter = new SimpleDateFormat("HH");
         Date date = new Date();
-        int time = Integer.parseInt(formatter.format(date));
+         time = Integer.parseInt(formatter.format(date));
         Log.i("WEATHER_DATA_Time", String.valueOf(time));
-        int icon = 0;
-        try {
 
 
-//        DAY ICON AND BACKGROUND
-            if (time >= 6 && time < 18) {
-                linearLayoutFirst.setBackgroundResource(R.drawable.day_background);
-                if (iconId == 800) {
-                    icon = R.drawable.clear_day;
+            try {
 
-                } else if (iconId == 801) {
 
-                    icon = R.drawable.fewcloud_day;
-                } else if (iconId == 802) {
-
-                    icon = R.drawable.scatteredcloud_day;
-                } else if (iconId == 803 || iconId == 804) {
-
-                    icon = R.drawable.overcast_cloud;
-                } else if (iconId >= 701 && iconId <= 781) {
-
-                    icon = R.drawable.mist_day;
-                } else if (iconId >= 600 && iconId <= 622) {
-
-                    icon = R.drawable.snow;
-                } else if (iconId == 500 || iconId == 501 || iconId == 520 || iconId == 521 || iconId == 522) {
-
-                    icon = R.drawable.lightrain_day;
-                } else if (iconId == 502 || iconId == 503 || iconId == 504 || iconId == 531) {
-
-                    icon = R.drawable.heavy_rain;
-                } else if (iconId == 511) {
-
-                    icon = R.drawable.freezing_rain;
-                } else if (iconId >= 300 && iconId <= 321) {
-
-                    icon = R.drawable.drizziling;
-                } else if (iconId == 200 || iconId == 201 || iconId == 202 || iconId == 221 || iconId == 230 || iconId == 231 || iconId == 232) {
-
-                    icon = R.drawable.thunderstrom_rain;
-                } else if (iconId == 210 || iconId == 211) {
-
-                    icon = R.drawable.thunderstrom_day;
-                } else if (iconId == 212) {
-
-                    icon = R.drawable.heavythunderstrom_day;
-                } else {
-
-                    icon = R.drawable.weatherlogo;
+//        DAY BACKGROUND
+                if (time >= 6 && time < 18) {
+                    linearLayoutFirst.setBackgroundResource(R.drawable.day_background);
+                }
+//        NIGHT BACKGROUND
+                else {
+                    linearLayoutFirst.setBackgroundResource(R.drawable.night_background);
                 }
 
             }
-//        NIGHT ICON AND BACKGROUND
-            else {
-                linearLayoutFirst.setBackgroundResource(R.drawable.night_background);
-                if (iconId == 800) {
-
-                    icon = R.drawable.clear_night;
-                } else if (iconId == 801) {
-
-                    icon = R.drawable.fewcloud_night;
-                } else if (iconId == 802) {
-
-                    icon = R.drawable.scatteredcloud_night;
-                } else if (iconId == 803 || iconId == 804) {
-
-                    icon = R.drawable.overcast_cloud;
-                } else if (iconId >= 701 && iconId <= 781) {
-
-                    icon = R.drawable.mist_night;
-                } else if (iconId >= 600 && iconId <= 622) {
-
-                    icon = R.drawable.snow;
-                } else if (iconId == 500 || iconId == 501 || iconId == 520 || iconId == 521 || iconId == 522) {
-
-                    icon = R.drawable.lightrain_night;
-                } else if (iconId == 502 || iconId == 503 || iconId == 504 || iconId == 531) {
-
-                    icon = R.drawable.heavy_rain;
-                } else if (iconId == 511) {
-
-                    icon = R.drawable.freezing_rain;
-                } else if (iconId >= 300 && iconId <= 321) {
-
-                    icon = R.drawable.drizziling;
-                } else if (iconId == 200 || iconId == 201 || iconId == 202 || iconId == 221 || iconId == 230 || iconId == 231 || iconId == 232) {
-
-                    icon = R.drawable.thunderstrom_rain;
-                } else if (iconId == 210 || iconId == 211) {
-
-                    icon = R.drawable.thunderstrom_night;
-                } else if (iconId == 212) {
-
-                    icon = R.drawable.heavythunderstrom_night;
-                } else {
-
-                    icon = R.drawable.weatherlogo;
-                }
-
+            catch (Exception e) {
+                Log.i("WEATHER_DATA_iconSet", e.toString());
             }
 
 
-        } catch (Exception e) {
-            Log.i("WEATHER_DATA_iconSet", e.toString());
-        }
-        return icon;
     }
 }
