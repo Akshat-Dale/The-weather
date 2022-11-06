@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat df = new DecimalFormat("0.0");
     public static final int REQUEST_CODE = 100;
     EditText cityEditText;
-    TextView cityTextView, weatherConditionTextView, temperatureTextView, textViewSunriseTime, textViewSunsetTime, textViewWindSpeed, textViewHumidityPercentage;
+    TextView cityTextView, weatherConditionTextView, temperatureTextView, textViewSunriseTime, textViewSunsetTime, textViewWindSpeed, textViewHumidityPercentage , textViewPressureValue;
     ImageView weatherImageView;
     LinearLayout linearLayoutFirst;
     LinearLayoutManager layoutManagerForRecycleView;
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         textViewSunriseTime = findViewById(R.id.textViewSunriseTime);
         textViewWindSpeed = findViewById(R.id.textViewWindSpeed);
         textViewHumidityPercentage = findViewById(R.id.textViewHumidityPercentage);
+        textViewPressureValue = findViewById(R.id.textViewPressureValue);
         weatherImageView = findViewById(R.id.weatherImageView);
         linearLayoutFirst = findViewById(R.id.linearLayoutFirst);
         recyclerViewForecast = findViewById(R.id.recyclerViewForecast);
@@ -178,6 +179,12 @@ public class MainActivity extends AppCompatActivity {
 
                     weatherConditionTextView.setText(currentWeatherDescriptionMain + "  ");
                     textViewWindSpeed.setText(windSpeed2Digit + " km/h");
+
+                    //GETTING PRESSURE AND SET
+                    String currentPressure = response.getJSONObject("main").getString("pressure");
+                    double currentPressuredouble = Double.parseDouble(currentPressure)/1013;
+                    String currentPressureString = df.format(currentPressuredouble);
+                    textViewPressureValue.setText(currentPressureString+" atm");
 
                 } catch (JSONException e) {
                     Log.i("WEATHER_apiCall", "SOME ERROR IN RESPONSE WEATHER");

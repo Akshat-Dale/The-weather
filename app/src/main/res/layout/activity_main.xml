@@ -239,6 +239,33 @@
                     android:textColor="#E72196F3"
                     android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/textViewPressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="265dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="Pressure"
+                    android:textColor="#E72196F3"
+                    android:textSize="20sp"
+                    app:drawableStartCompat="@drawable/pressure_icon" />
+
+                <TextView
+                    android:id="@+id/textViewPressureValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="135dp"
+                    android:layout_marginTop="265dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="1 atm"
+                    android:textColor="#E72196F3"
+                    android:textSize="20sp" />
+
             </androidx.cardview.widget.CardView>
 
 
